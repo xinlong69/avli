@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# 
+.vscode/*
+!.vscode/extensions.json
+node_modules/
+app/web/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

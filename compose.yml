@@ -1,0 +1,92 @@
+services:
+  # --- DATABASE SERVICE (PostgreSQL) ---
+  db:
+    image: postgres:18-alpine
+    container_name: avli-postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+    ports:
+      - "5432:5432"
+    volumes:
+      - app-db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  prestart:
+    image: '${DOCKER_IMAGE_AGENT?Variable not set}:${TAG-latest}'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - avli-network
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    command: bash scripts/prestart.sh
+    env_file:
+      - .env
+    environment:
+      - WEB_HOST=${WEB_HOST?Variable not set}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - AGENT_CORS_ORIGINS=${AGENT_CORS_ORIGINS}
+      - SECRET_KEY=${SECRET_KEY?Variable not set}
+      - FIRST_SUPERUSER=${FIRST_SUPERUSER?Variable not set}
+      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD?Variable not set}
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+
+  agent:
+    image: '${DOCKER_IMAGE_AGENT?Variable not set}:${TAG-latest}'
+    restart: always
+    networks:
+      - avli-network
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      prestart:
+        condition: service_completed_successfully
+    env_file:
+      - .env
+    environment:
+      - WEB_HOST=${WEB_HOST?Variable not set}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - AGENT_CORS_ORIGINS=${AGENT_CORS_ORIGINS}
+      - SECRET_KEY=${SECRET_KEY?Variable not set}
+      - FIRST_SUPERUSER=${FIRST_SUPERUSER?Variable not set}
+      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD?Variable not set}
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+
+volumes:
+  app-db-data:
+
+networks:
+  avli-network:
+    driver: bridge
