@@ -2,7 +2,12 @@
 name = "avli-agent"
 version = "1.0.0"
 description = ""
+authors = [
+  { name = "Xin Long He", email = "xinlonghe2512@gmail.com" }
+]
+readme = "README.md"
 requires-python = ">=3.13,<3.14"
+
 dependencies = [
     "fastapi[standard]>=0.141.1,<1.0.0",
     "tenacity<10.0.0,>=8.2.3",
@@ -15,6 +20,12 @@ dependencies = [
     "langgraph-checkpoint>=4.2.0",
     "redisvl>=0.3.9",
     "langchain-openrouter>=0.2.8",
+    "sse-starlette>=3.4.8",
+    "uvicorn>=0.52.4",
+    "python-dotenv>=1.2.3",
+    "deepeval>=4.1.9",
+    "ragas>=0.4.3",
+    "langfuse>=4.14.4",
 ]
 
 [dependency-groups]
@@ -23,6 +34,9 @@ dev = [
     "mypy<3.0.0,>=1.8.0",
     "ruff<1.0.0,>=0.2.2",
     "coverage<8.0.0,>=7.4.3",
+    "pre-commit>=4.6.2",
+    "isort>=8.0.1",
+    "black>=26.5.1",
 ]
 
 [build-system]
@@ -36,9 +50,14 @@ packages = ["app"]
 strict = true
 exclude = ["venv", ".venv"]
 
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+
 [tool.ruff]
 target-version = "py313"
 exclude = []
+fix = true
 
 [tool.ruff.lint]
 select = [

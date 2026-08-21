@@ -29,7 +29,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 COPY ./agent/scripts /app/agent/scripts
 
-COPY ./agent/pyproject.toml ./agent/alembic.ini /app/agent/
+COPY ./agent/pyproject.toml /app/agent/
 
 COPY ./agent/app /app/agent/app
 

@@ -35,7 +35,6 @@ class Settings(BaseSettings):
         return [str(origin).rstrip("/") for origin in self.AGENT_CORS_ORIGINS]
 
     PROJECT_NAME: str
-    FIRST_SUPERUSER_PASSWORD: str
 
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":
@@ -51,10 +50,6 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret(
-            "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
-        )
-
         return self
 
 

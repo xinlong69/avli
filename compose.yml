@@ -17,8 +17,6 @@ services:
       - ENVIRONMENT=${ENVIRONMENT}
       - AGENT_CORS_ORIGINS=${AGENT_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY?Variable not set}
-      - FIRST_SUPERUSER=${FIRST_SUPERUSER?Variable not set}
-      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD?Variable not set}
 
   agent:
     image: '${DOCKER_IMAGE_AGENT?Variable not set}:${TAG-latest}'
@@ -37,8 +35,6 @@ services:
       - ENVIRONMENT=${ENVIRONMENT}
       - AGENT_CORS_ORIGINS=${AGENT_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY?Variable not set}
-      - FIRST_SUPERUSER=${FIRST_SUPERUSER?Variable not set}
-      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD?Variable not set}
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"]
