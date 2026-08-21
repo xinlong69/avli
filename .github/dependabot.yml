@@ -35,7 +35,6 @@ updates:
   - package-ecosystem: docker
     directories:
       - /agent
-      - /web
     schedule:
       interval: "monthly"
     cooldown:

@@ -224,7 +224,6 @@ __marimo__/
 
 #
 node_modules/
-app/web/
 /test-results/
 /playwright-report/
 /blob-report/

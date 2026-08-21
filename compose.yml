@@ -14,7 +14,6 @@ services:
     env_file:
       - .env
     environment:
-      - WEB_HOST=${WEB_HOST?Variable not set}
       - ENVIRONMENT=${ENVIRONMENT}
       - AGENT_CORS_ORIGINS=${AGENT_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY?Variable not set}
@@ -35,7 +34,6 @@ services:
     env_file:
       - .env
     environment:
-      - WEB_HOST=${WEB_HOST?Variable not set}
       - ENVIRONMENT=${ENVIRONMENT}
       - AGENT_CORS_ORIGINS=${AGENT_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY?Variable not set}
