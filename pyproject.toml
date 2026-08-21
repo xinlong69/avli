@@ -15,12 +15,8 @@ members = ["agent"]
 extend-exclude = [
     "img/",
     "uv.lock",
-    "bun.lock",
     "agent/coverage/",
     "agent/htmlcov/",
-    "agent/app/web/",
-    "web/dist/",
-    "web/public/assets/images/",
 ]
 
 [tool.typos.default]

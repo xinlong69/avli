@@ -1,0 +1,35 @@
+{
+  // --- Python & Environment Settings ---
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+  "python.terminal.useEnvFile": true,
+  "python.terminal.activateEnvironment": true,
+
+  // --- Formatting & Linting (Ruff) ---
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+  "ruff.nativeServer": true,
+
+  // --- Testing (Pytest integration) ---
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["tests"],
+
+  // --- File Nesting & UI Cleanliness ---
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "pyproject.toml": "uv.lock, .python-version, requirements*.txt",
+    ".env": ".env.*, .env.example"
+  }
+}

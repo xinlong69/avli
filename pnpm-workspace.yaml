@@ -1,6 +1,0 @@
-ignoredBuiltDependencies:
-  - electron
-  - sharp
-onlyBuiltDependencies:
-  - esbuild
-  - protobufjs

@@ -1,28 +1,10 @@
-FROM oven/bun:1 AS web-build
-
-WORKDIR /app
-
-COPY package.json bun.lock /app/
-COPY web/package.json /app/web/
-
-WORKDIR /app/web
-
-RUN bun install
-
-COPY ./web /app/web
-
-ARG VITE_API_URL=
-
-RUN bun run build
-
-
-FROM python:3.14-slim
+FROM python:3.13-slim
 
 ENV PYTHONUNBUFFERED=1
 
 # Install uv
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
-COPY --from=ghcr.io/astral-sh/uv:0.9.26 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.5 /uv /uvx /bin/
 
 # Compile bytecode
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#compiling-bytecode
@@ -50,8 +32,6 @@ COPY ./agent/scripts /app/agent/scripts
 COPY ./agent/pyproject.toml ./agent/alembic.ini /app/agent/
 
 COPY ./agent/app /app/agent/app
-
-COPY --from=web-build /app/agent/app/web /app/agent/app/web
 
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
