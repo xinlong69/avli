@@ -26,6 +26,8 @@ dependencies = [
     "deepeval>=4.1.9",
     "ragas>=0.4.3",
     "langfuse>=4.14.4",
+    "sentence-transformers>=6.0.0",
+    "llama-cpp-python>=0.3.35",
 ]
 
 [dependency-groups]

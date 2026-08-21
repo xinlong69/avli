@@ -3,7 +3,7 @@ services:
     image: '${DOCKER_IMAGE_AGENT?Variable not set}:${TAG-latest}'
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./apps/agent/Dockerfile
     networks:
       - avli-network
     depends_on:
@@ -20,6 +20,7 @@ services:
 
   agent:
     image: '${DOCKER_IMAGE_AGENT?Variable not set}:${TAG-latest}'
+    
     restart: always
     networks:
       - avli-network
@@ -44,7 +45,7 @@ services:
 
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./apps/agent/Dockerfile
 
 volumes:
   app-db-data:
