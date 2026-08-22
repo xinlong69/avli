@@ -1,3 +1,9 @@
+[project]
+name = "avli-workspace"
+version = "1.0.0"
+description = "Monorepo for agents and ingestor services"
+requires-python = ">=3.13"
+
 [dependency-groups]
 dev = [
     "prek>=0.4.11,<1.0.0",
@@ -9,14 +15,14 @@ github-actions = [
 ]
 
 [tool.uv.workspace]
-members = ["agent"]
+members = ["apps/*"]
 
 [tool.typos.files]
 extend-exclude = [
     "img/",
     "uv.lock",
-    "agent/coverage/",
-    "agent/htmlcov/",
+    "agents/coverage/",
+    "agents/htmlcov/",
 ]
 
 [tool.typos.default]

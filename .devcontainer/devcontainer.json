@@ -1,0 +1,62 @@
+{
+	"name": "Avli development container",
+	"dockerComposeFile": ["../compose.dev.yml"],
+  "service": "agents",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:4": {
+			"moby": true,
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/python:1": {
+      "version": "3.13",
+      "installTools": true
+    }
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+        "ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"github.vscode-github-actions",
+				"github.copilot",
+				"github.copilot-chat"
+			],
+			"settings": {
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+          }
+        }
+      }
+		}
+	},
+	"forwardPorts": [8000, 8001, 6333, 6379],
+	"portsAttributes": {
+		"8000": {
+			"label": "Agents",
+			"onAutoForward": "notify"
+		},
+    "8001": {
+			"label": "Ingestor",
+			"onAutoForward": "notify"
+		},
+		"6333": {
+			"label": "Qdrant",
+			"onAutoForward": "silent"
+		},
+		"6379": {
+			"label": "Redis",
+			"onAutoForward": "silent"
+		}
+	},
+	"remoteUser": "dev",
+	"workspaceFolder": "/workspaces/avli"
+}

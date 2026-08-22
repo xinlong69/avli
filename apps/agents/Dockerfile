@@ -25,21 +25,19 @@ ENV PATH="/app/.venv/bin:$PATH"
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-workspace --package app
+    uv sync --frozen --no-install-workspace --package avli-agents
 
-COPY ./agent/scripts /app/agent/scripts
-
-COPY ./agent/pyproject.toml /app/agent/
-
-COPY ./agent/app /app/agent/app
+COPY ./apps/agents/scripts /app/agents/scripts
+COPY ./apps/agents/pyproject.toml /app/agents/
+COPY ./apps/agents/app /app/agents/app
 
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --package app
+    uv sync --frozen --package avli-agents
 
-WORKDIR /app/agent/
+WORKDIR /app/agents/
 
 CMD ["fastapi", "run", "--workers", "4"]
