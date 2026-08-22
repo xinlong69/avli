@@ -66,7 +66,7 @@ services:
     container_name: redis-db
     restart: unless-stopped
     volumes:
-      - ./redis-data:/data
+      - redis-data:/data
     ports:
       - ${REDIS_REST_PORT?Variable not set}:6379
     networks:
