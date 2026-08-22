@@ -2,44 +2,37 @@
 name = "avli-agents"
 version = "1.0.0"
 description = ""
-authors = [
-  { name = "Xin Long He", email = "xinlonghe2512@gmail.com" }
-]
+authors = [{ name = "Xin Long He", email = "xinlonghe2512@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 
 dependencies = [
-    "fastapi[standard]>=0.141.1,<1.0.0",
-    "tenacity<10.0.0,>=8.2.3",
-    "pydantic>2.0",
-    "httpx<1.0.0,>=0.25.1",
-    "pydantic-settings<3.0.0,>=2.2.1",
-    "langgraph>=1.2.11",
-    "redis>=8.1.0",
-    "langchain-core>=1.6.0",
-    "langgraph-checkpoint>=4.2.0",
-    "redisvl>=0.3.9",
-    "langchain-openrouter>=0.2.8",
-    "sse-starlette>=3.4.8",
-    "uvicorn>=0.52.4",
-    "python-dotenv>=1.2.3",
-    "deepeval>=4.1.9",
-    "ragas>=0.4.3",
-    "langfuse>=4.14.4",
-    "sentence-transformers>=6.0.0",
-    "llama-cpp-python>=0.3.35",
-    "loguru>=0.7.3",
+  "fastapi[standard]>=0.141.1,<1.0.0",
+  "langchain-community>=0.4.2",
+  "langchain-openrouter>=0.2.8",
+  "langfuse>=4.14.4",
+  "langgraph-checkpoint>=4.2.0",
+  "langgraph>=1.2.11",
+  "llama-cpp-python>=0.3.35",
+  "loguru>=0.7.3",
+  "pydantic-settings<3.0.0,>=2.2.1",
+  "redis>=8.1.0",
+  "sentence-transformers>=6.0.0",
+  "sse-starlette>=3.4.8",
+  "tenacity<10.0.0,>=8.2.3",
 ]
 
 [dependency-groups]
 dev = [
-    "pytest<10.0.0,>=7.4.3",
-    "mypy>=1.8.0,<3.0.0",
-    "ruff<1.0.0,>=0.2.2",
-    "coverage<8.0.0,>=7.4.3",
-    "pre-commit>=4.6.2",
-    "isort>=8.0.1",
-    "black>=26.5.1",
+  "black>=26.5.1",
+  "coverage<8.0.0,>=7.4.3",
+  "deepeval>=4.1.10",
+  "isort>=8.0.1",
+  "mypy>=1.8.0,<3.0.0",
+  "pre-commit>=4.6.2",
+  "pytest<10.0.0,>=7.4.3",
+  "ragas>=0.4.3",
+  "ruff<1.0.0,>=0.2.2",
 ]
 
 [build-system]
@@ -64,21 +57,21 @@ fix = true
 
 [tool.ruff.lint]
 select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "ARG001", # unused arguments in functions
-    "T201",   # print statements are not allowed
+  "E",      # pycodestyle errors
+  "W",      # pycodestyle warnings
+  "F",      # pyflakes
+  "I",      # isort
+  "B",      # flake8-bugbear
+  "C4",     # flake8-comprehensions
+  "UP",     # pyupgrade
+  "ARG001", # unused arguments in functions
+  "T201",   # print statements are not allowed
 ]
 ignore = [
-    "E501",  # line too long, handled by black
-    "B008",  # do not perform function calls in argument defaults
-    "W191",  # indentation contains tabs
-    "B904",  # Allow raising exceptions without from e, for HTTPException
+  "E501", # line too long, handled by black
+  "B008", # do not perform function calls in argument defaults
+  "W191", # indentation contains tabs
+  "B904", # Allow raising exceptions without from e, for HTTPException
 ]
 
 [tool.ruff.lint.pyupgrade]
