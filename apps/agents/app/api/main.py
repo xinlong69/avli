@@ -1,5 +1,6 @@
-from apps.agent.app.api.routes import items, utils
 from fastapi import APIRouter
+
+from app.api.routes import items, utils
 
 # from app.core.config import settings
 

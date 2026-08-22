@@ -1,43 +1,56 @@
-FROM python:3.13-slim
+# ==========================================
+# Stage 1: Builder
+# ==========================================
+FROM python:3.13-bookworm AS builder
 
 ENV PYTHONUNBUFFERED=1
-
-# Install uv
-# Ref: https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
-COPY --from=ghcr.io/astral-sh/uv:0.12.5 /uv /uvx /bin/
-
-# Compile bytecode
-# Ref: https://docs.astral.sh/uv/guides/integration/docker/#compiling-bytecode
 ENV UV_COMPILE_BYTECODE=1
-
-# uv Cache
-# Ref: https://docs.astral.sh/uv/guides/integration/docker/#caching
 ENV UV_LINK_MODE=copy
 
-WORKDIR /app/
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:0.12.5 /uv /uvx /bin/
 
-# Place executables in the environment at the front of the path
-# Ref: https://docs.astral.sh/uv/guides/integration/docker/#using-the-environment
-ENV PATH="/app/.venv/bin:$PATH"
+WORKDIR /app
 
-# Install dependencies
-# Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
+# 1. Install external third-party dependencies (cached layer)
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-workspace --package avli-agents
 
-COPY ./apps/agents/scripts /app/agents/scripts
-COPY ./apps/agents/pyproject.toml /app/agents/
-COPY ./apps/agents/app /app/agents/app
+# 2. Copy workspace package matching the root workspace layout
+COPY ./apps/agents /app/apps/agents
 
-# Sync the project
-# Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
+# 3. Sync and install the workspace project
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --package avli-agents
 
-WORKDIR /app/agents/
 
-CMD ["fastapi", "run", "--workers", "4"]
+# ==========================================
+# Stage 2: Runtime (Minimal slim image)
+# ==========================================
+FROM python:3.13-slim-bookworm AS runner
+
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Create the non-root user 'user' and grant passwordless sudo
+RUN apt-get update && apt-get install -y --no-install-recommends sudo \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd -m -s /bin/bash -u 1000 user \
+    && echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/user \
+    && chmod 0440 /etc/sudoers.d/user
+
+WORKDIR /app
+
+# Copy the pre-built virtual environment and application files from builder
+COPY --from=builder /app/.venv /app/.venv
+COPY ./apps/agents /app/apps/agents
+
+WORKDIR /app/apps/agents
+
+USER user
+
+CMD ["fastapi", "run", "--port", "8000", "--workers", "4"]
